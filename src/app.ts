@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import { errorHandler } from './middleware/errorHandler';
 import checkoutRoutes from './routes/checkoutRoutes';
 import productRoutes from './routes/productRoutes';
@@ -6,6 +7,13 @@ import pricingRuleRoutes from './routes/pricingRuleRoutes';
 import docsRoutes from './routes/docsRoutes';
 
 const app = express();
+
+// Enable CORS for all routes
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 
 app.use(express.json());
 
