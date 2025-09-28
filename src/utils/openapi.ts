@@ -238,12 +238,12 @@ registry.registerPath({
         'application/json': {
           schema: z.object({
             pricingRules: z.array(z.object({
-              sku: z.string().openapi({ example: 'atv' }),
-              name: z.string().openapi({ example: 'Apple TV' }),
-              type: z.string().openapi({ example: 'BuyXGetYFreeRule' }),
-            }).openapi({ example: { sku: 'atv', name: 'Apple TV', type: 'BuyXGetYFreeRule' } })),
-            count: z.number().openapi({ example: 2 }),
-          }).openapi({ example: { pricingRules: [{ sku: 'atv', name: 'Apple TV', type: 'BuyXGetYFreeRule' }], count: 2 } }),
+              sku: z.string(),
+              name: z.string(),
+              type: z.string(),
+            })),
+            count: z.number(),
+          }),
         },
       },
     },
@@ -261,18 +261,34 @@ registry.registerPath({
       content: {
         'application/json': {
           schema: z.object({
-            status: z.string().openapi({ example: 'OK' }),
-            timestamp: z.string().openapi({ example: '2023-10-01T12:00:00.000Z' }),
-            service: z.string().openapi({ example: 'Zeller Checkout System' }),
-          }).openapi({ example: { status: 'OK', timestamp: '2023-10-01T12:00:00.000Z', service: 'Zeller Checkout System' } }),
+            status: z.string(),
+            timestamp: z.string(),
+            service: z.string(),
+          }),
         },
       },
     },
   },
 });
 
-export function generateOpenAPISpec() {
+export function generateOpenAPISpec(baseUrl?: string) {
   const generator = new OpenApiGeneratorV3(registry.definitions);
+
+  // Determine the base URL dynamically
+  const servers = [];
+
+  if (baseUrl) {
+    servers.push({
+      url: baseUrl,
+      description: 'Current deployment',
+    });
+  } else {
+    // Default to localhost for development
+    servers.push({
+      url: 'http://localhost:3000',
+      description: 'Development server',
+    });
+  }
 
   return generator.generateDocument({
     openapi: '3.0.0',
@@ -285,12 +301,7 @@ export function generateOpenAPISpec() {
         email: 'dev@zeller.co',
       },
     },
-    servers: [
-      {
-        url: 'http://localhost:3000',
-        description: 'Development server',
-      },
-    ],
+    servers,
     tags: [
       {
         name: 'Checkout',
