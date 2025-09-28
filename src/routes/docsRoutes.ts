@@ -12,7 +12,14 @@ router.get('/openapi.json', (req: Request, res: Response) => {
     res.header('Content-Type', 'application/json');
 
     // Construct the base URL dynamically for the current deployment
-    const baseUrl = `${req.protocol}://${req.get('host')}`;
+    const host = req.get('host');
+
+    // Force HTTPS for Vercel deployments and production domains
+    const isVercel = host && host.includes('.vercel.app');
+    const isProduction = host && !host.includes('localhost') && !host.includes('127.0.0.1');
+
+    const protocol = (isVercel || isProduction) ? 'https' : req.protocol;
+    const baseUrl = `${protocol}://${host}`;
     const spec = generateOpenAPISpec(baseUrl);
     res.json(spec);
   } catch (error) {
