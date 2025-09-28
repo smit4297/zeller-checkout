@@ -1,0 +1,50 @@
+{
+  "name": "zeller-checkout-system",
+  "version": "1.0.0",
+  "description": "TypeScript checkout system for Zeller's computer store with flexible pricing rules",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "docs": "npm run dev",
+    "docs:generate": "node -e \"const { generateOpenAPISpec } = require('./dist/utils/openapi'); const fs = require('fs'); fs.writeFileSync('./openapi.json', JSON.stringify(generateOpenAPISpec(), null, 2)); console.log('OpenAPI spec generated at openapi.json');\"",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "format": "prettier --write src/**/*.ts"
+  },
+  "keywords": [
+    "typescript",
+    "express",
+    "checkout",
+    "pricing-rules"
+  ],
+  "author": "Zeller Dev Team",
+  "license": "MIT",
+  "dependencies": {
+    "@asteasolutions/zod-to-openapi": "^8.1.0",
+    "@scalar/api-reference": "^1.36.1",
+    "express": "^4.18.2",
+    "uuid": "^9.0.0",
+    "zod": "^4.1.11"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "@types/jest": "^29.5.5",
+    "@types/node": "^20.6.3",
+    "@types/supertest": "^6.0.3",
+    "@types/uuid": "^9.0.4",
+    "@typescript-eslint/eslint-plugin": "^6.7.2",
+    "@typescript-eslint/parser": "^6.7.2",
+    "eslint": "^8.49.0",
+    "jest": "^29.7.0",
+    "prettier": "^3.0.3",
+    "supertest": "^7.1.4",
+    "ts-jest": "^29.1.1",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.2.2"
+  }
+}
